@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.dendoc.login.exception.LoginFailedException;
 import com.dendoc.login.model.Login;
+import com.dendoc.login.model.UserProvider;
 import com.dendoc.login.model.Users;
 
 @Service
@@ -20,6 +21,9 @@ public class LoginService {
 	@Autowired
 	UserServiceProxy userServiceProxy;
 
+	/*
+	 * @Autowired RegistrationServiceProxy registrationServiceProxy;
+	 */
 	
 	@Value("${server.port}")
 	private int port;
@@ -47,4 +51,17 @@ public class LoginService {
 		}
 	}
 	
+	public Users registerUser(Users user) {
+		
+		logger.info("registerUseruserServiceProxy  "+user.toString());
+		return userServiceProxy.registerUser(user);
+		
+	}
+	
+	public boolean insertUserPRovider(UserProvider userProvider) {
+		
+		boolean val = userServiceProxy.insertLoginProvider(userProvider);
+		logger.info("insertUserPRovider  "+val);
+		return val;
+	}
 }
