@@ -17,22 +17,25 @@ import io.swagger.annotations.ApiModelProperty;
 public class Service {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "SERVICE_ID")
 	private long serviceId;
-	
-	@ApiModelProperty(name="serviceName",value="serviceNameValue",example="Cosmetic")
+
+	@ApiModelProperty(name = "serviceName", value = "serviceNameValue", example = "Cosmetic")
+	@Column(name = "SERVICE_NAME")
 	private String serviceName;
-	
-	@ApiModelProperty(name="serviceDetails",value="serviceDetailsValue",example="Cosmetic")
+
+	@ApiModelProperty(name = "serviceDetails", value = "serviceDetailsValue", example = "Cosmetic")
+	@Column(name = "SERVICE_DETAILS")
 	private String serviceDetails;
+
 	
-	 @ManyToMany(
-		 		fetch = FetchType.LAZY, 
-		 		cascade = {CascadeType.PERSIST, CascadeType.MERGE },
-		 		mappedBy = "insurance"
-		 	)
-	 @OnDelete(action = OnDeleteAction.CASCADE)
-	 private Set<Provider> providers = new HashSet<Provider>();
+	  @ManyToMany( fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,
+	  CascadeType.MERGE }, mappedBy = "services" )
+	  
+	  @OnDelete(action = OnDeleteAction.CASCADE) private Set<Provider> providers =
+	  new HashSet<Provider>();
+	 
 	public Service() {
 		super();
 	}
@@ -44,7 +47,6 @@ public class Service {
 		this.serviceDetails = serviceDetails;
 	}
 
-	
 	public long getServiceId() {
 		return serviceId;
 	}
@@ -69,10 +71,9 @@ public class Service {
 		this.serviceDetails = serviceDetails;
 	}
 
-	@Override
-	public String toString() {
-		return "Service [serviceId=" + serviceId + ", serviceName=" + serviceName + ", serviceDetails=" + serviceDetails
-				+ ", providers=" + providers + "]";
-	}
-
+	
+	  @Override public String toString() { return "Service [serviceId=" + serviceId
+	  + ", serviceName=" + serviceName + ", serviceDetails=" + serviceDetails +
+	  ", providers=" + providers + "]"; }
+	 
 }

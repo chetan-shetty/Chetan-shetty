@@ -17,22 +17,25 @@ import io.swagger.annotations.ApiModelProperty;
 public class Insurance {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "INSURANCE_ID")
 	private long insuranceId;
 	
 	@ApiModelProperty(name="insuranceName",value="insuranceNameValue",example="MEDICARE")
+	@Column(name = "INSURANCE_NAME")
 	private String insuranceName;
 	
 	@ApiModelProperty(name="insuranceDetails",value="insuranceDetailsValue",example="MEDICARE")
+	@Column(name = "INSURANCE_DETAILS")
 	private String insuranceDetails;
 	
-	@ManyToMany(
-	 		fetch = FetchType.LAZY, 
-	 		cascade = {CascadeType.PERSIST, CascadeType.MERGE },
-	 		mappedBy = "insurance"
-	 	)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Set<Provider> providers = new HashSet<Provider>();
+	
+	  @ManyToMany( fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,
+	  CascadeType.MERGE }, mappedBy = "insurance" )
+	  
+	  @OnDelete(action = OnDeleteAction.CASCADE) private Set<Provider> providers =
+	  new HashSet<Provider>();
+	 
 	
 	public Insurance() {
 		super();
@@ -69,10 +72,10 @@ public class Insurance {
 		this.insuranceDetails = insuranceDetails;
 	}
 
-	@Override
-	public String toString() {
-		return "Insurance [insuranceId=" + insuranceId + ", insuranceName=" + insuranceName + ", insuranceDetails="
-				+ insuranceDetails + ", providers=" + providers + "]";
-	}
+	
+	  @Override public String toString() { return "Insurance [insuranceId=" +
+	  insuranceId + ", insuranceName=" + insuranceName + ", insuranceDetails=" +
+	  insuranceDetails + ", providers=" + providers + "]"; }
+	 
 
 }

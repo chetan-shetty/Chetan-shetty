@@ -2,9 +2,12 @@ package com.dendoc.provider.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -18,24 +21,36 @@ import io.swagger.annotations.ApiModelProperty;
 public class Address implements Serializable {
 
 	@Id
-	@GeneratedValue
+	@Column(name = "ADDRESS_ID")
 	private long addressId;
 	
 	@ApiModelProperty(name="pincode",value="pincodeValue",example="6027")
+	@Column(name = "PINCODE")
 	private long pincode;
 	
 	@ApiModelProperty(name="address",value="addressValue",example="Upstairs Suite 1/126 Grand Boulevard")
+	@Column(name = "ADDRESS")
 	private String address;
 
 	@ApiModelProperty(name="state",value="stateValue",example="Joondalup WA")
+	@Column(name = "STATE")
 	private String state ;
 
 	@ApiModelProperty(name="country",value="countryValue",example="Australia")
+	@Column(name = "COUNTRY")
 	private String country ;
 	
-	@OneToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "provider_id", nullable = false)
-	private Provider provider;
+	/*
+	 * @Column(name = "PROVIDER_ID_FK") private long pIdFk;
+	 */
+	 
+	
+	/*
+	 * @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional =
+	 * false)
+	 * 
+	 * @JoinColumn(name = "PROVIDER_ID") private Provider provider;
+	 */
 		
 	public Address() {
 		super();

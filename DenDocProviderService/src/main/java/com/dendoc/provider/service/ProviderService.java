@@ -16,6 +16,7 @@ import com.dendoc.provider.dao.ServiceRepository;
 import com.dendoc.provider.exception.CustomException;
 import com.dendoc.provider.model.Insurance;
 import com.dendoc.provider.model.Provider;
+import com.dendoc.provider.model.UserProvider;
 
 @Service
 public class ProviderService {
@@ -62,20 +63,19 @@ public class ProviderService {
 	
 	//@PutMapping("{id}")
 	public Provider updateProvider(Long id, Provider provider) {
-		logger.log(Level.INFO, "Inside updateProvider {}",provider.toString());
+		logger.info("Inside updateProvider "+provider.toString());
 		Provider providerToUpdate = providerRepository.findById(id).
 				orElseThrow(()->new CustomException("Provider not found"));
 	 
-	        providerToUpdate.setProviderName((provider.getProviderName()!=null) ? provider.getProviderName() : providerToUpdate.getProviderName());
-	        providerToUpdate.setPhoneNumber(provider.getPhoneNumber()!=null ? provider.getPhoneNumber() : providerToUpdate.getPhoneNumber());
-	        providerToUpdate.setEmail(provider.getEmail() !=null ? provider.getEmail() : providerToUpdate.getEmail());
-		
-	    logger.log(Level.INFO, "Provider details Before updating into DB : {}",providerToUpdate.toString());
-	    return providerRepository.save(providerToUpdate);
+		providerToUpdate =provider;
+	    logger.info( "Provider details Before updating into DB : "+provider.toString());
+	    return  providerRepository.save(providerToUpdate);
 	} 
 	
 	public Provider insertProvider(Provider provider) {
 		logger.log(Level.INFO, "Inside insertProvider {}",provider.toString());
+		logger.info("Inside insertProvider "+provider.toString());
+		//logger.info("Inside insertProvider {}",provider.toString());
 		return providerRepository.save(provider);
 	} 
 	
@@ -95,4 +95,30 @@ public class ProviderService {
 		providerRepository.findById(id).orElseThrow(()->new CustomException("Provider not found"));
 		providerRepository.deleteById(id);
 	}
+	
+	public List<Provider> getProviderByAllDetails(long service_id ,long pincode ,long insurance_id) {
+		logger.info("Inside getAllProviders  service_id : "+service_id+" pincode : "+pincode +" insurance_id : "+insurance_id);
+		List<Provider> providers =null;
+		if(insurance_id ==0 )
+			providers =providerRepository.getProviderByAllDetailsWithoutInc( service_id , pincode );
+		else providers= providerRepository.getProviderByAllDetails( service_id , pincode , insurance_id);
+		 
+		if(providers == null || providers.size() ==0){
+			String errorMessage = "There is no Provider with all details";
+			logger.info("Inside getAllProviders  "+errorMessage);
+			throw new CustomException(errorMessage);
+		}
+		return providers;
+	} 
+	
+	public boolean insertRegisterProvider(UserProvider userProvider) {
+		Provider provider =userProvider.getProvider();
+		logger.log(Level.INFO, "Inside insertProvider {}",provider.toString());
+		logger.info("Inside insertProvider "+provider.toString());
+		//logger.info("Inside insertProvider {}",provider.toString());
+		Provider provider1= providerRepository.save(provider);
+
+		logger.info("Inside insertProvider "+provider1.toString());
+		return true;
+	} 
 }

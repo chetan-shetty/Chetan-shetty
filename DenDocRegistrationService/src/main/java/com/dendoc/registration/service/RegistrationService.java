@@ -11,6 +11,7 @@ import com.dendoc.registration.config.Configuration;
 import com.dendoc.registration.dao.RegistrationRepository;
 import com.dendoc.registration.exception.UserExisitException;
 import com.dendoc.registration.exception.UserNotFoundException;
+import com.dendoc.registration.model.UserProvider;
 import com.dendoc.registration.model.Users;
 import com.dendoc.registration.rest.RegistrationController;
 
@@ -25,6 +26,11 @@ public class RegistrationService {
 	@Autowired
 	Configuration config;
 
+	
+	/*
+	 * @Autowired(required=true) RegistrationServiceProxy registrationServiceProxy;
+	 */
+	 
 	
 	@Value("${server.port}")
 	private int port;
@@ -62,4 +68,10 @@ public class RegistrationService {
 		}
 	}
 	
+	/*
+	 * public boolean insertUserPRovider(UserProvider userProvider) {
+	 * 
+	 * boolean val = registrationServiceProxy.insertLoginProvider(userProvider);
+	 * logger.info("insertUserPRovider  "+val); return val; }
+	 */
 }
