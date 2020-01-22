@@ -1,0 +1,17 @@
+version: "3"
+services:
+  
+  zipkin:
+    build: ./zipkin
+    image: localzipkin
+    expose:
+      - "9411"
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+
+    networks:
+      - dendoc-network
+    
+networks:
+  dendoc-network:

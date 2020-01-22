@@ -1,0 +1,33 @@
+version: "3"
+services:
+
+  EurekaServer:
+    build: ./DenDocRegisterServer
+    image: docker-dendoc-register-server
+    ports:
+      - "8761:8761"
+    networks:
+      - dendoc-network
+ 
+  ConfigServer:
+    build: ./DenDocConfigServer
+    image: docker-dendoc-config-server
+    ports:
+      - "8181:8181"
+    networks:
+      - dendoc-network
+    depends_on:
+      - EurekaServer
+      
+  ZuulServer:
+    build: ./DenDocZuulServer
+    image: docker-dendoc-zuul-gateway
+    ports:
+      - "8787:8787"
+    networks:
+      - dendoc-network
+    depends_on:
+      - ConfigServer
+  
+networks:
+  dendoc-network:

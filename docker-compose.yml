@@ -1,0 +1,48 @@
+version: "3"
+services:
+
+  EurekaServer:
+    image: docker-dendoc-register-server
+    ports:
+      - "8761:8761"
+    networks:
+      - consumer-producer
+ 
+  ConfigServer:
+    image: docker-dendoc-config-server
+    ports:
+      - "8181:8181"
+    networks:
+      - consumer-producer
+    depends_on:
+      - EurekaServer
+      
+  ZuulServer:
+    image: docker-dendoc-zuul-gateway
+    ports:
+      - "8787:8787"
+    networks:
+      - consumer-producer
+    depends_on:
+      - ConfigServer
+      
+  registration-service:
+    image: docker-dendoc-registration-service
+    ports:
+      - "8686:8686"
+    networks:
+      - consumer-producer
+    depends_on:
+      - ZuulServer
+      
+  login-service:
+    image: docker-dendoc-login-service
+    ports:
+      - "8585:8585"
+    networks:
+      - consumer-producer
+    depends_on:
+      - ZuulServer
+
+networks:
+  consumer-producer:

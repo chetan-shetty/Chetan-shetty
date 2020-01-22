@@ -1,0 +1,15 @@
+version: "3"
+services:
+  rabbitmq:
+    image: rabbitmq:management
+    expose:
+      - "5672"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+    networks:
+      - consumer-producer
+        
+networks:
+  consumer-producer:

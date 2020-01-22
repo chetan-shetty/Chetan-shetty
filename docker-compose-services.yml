@@ -1,0 +1,22 @@
+version: "3"
+services:
+
+  registration-service:
+    build: ./DenDocRegistrationService
+    image: docker-dendoc-registration-service
+    ports:
+      - "8686:8686"
+    networks:
+      - dendoc-network
+
+      
+  login-service:
+    build: ./DenDocLoginService
+    image: docker-dendoc-login-service
+    ports:
+      - "8585:8585"
+    networks:
+      - dendoc-network
+
+networks:
+  dendoc-network:

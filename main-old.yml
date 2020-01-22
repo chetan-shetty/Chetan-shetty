@@ -1,0 +1,80 @@
+version: '3'
+
+services:
+  db-server:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root@1234
+      MYSQL_DATABASE: dendoc
+    ports:
+      - "3307:3306"
+    networks:
+      - dendoc-network
+      
+  zipkin:
+    build: ./zipkin
+    image: localzipkin
+    expose:
+      - "9411"
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+
+    networks:
+      - dendoc-network
+      
+  EurekaServer:
+    build: ./DenDocRegisterServer
+    image: docker-dendoc-register-server
+    ports:
+      - "8761:8761"
+    networks:
+      - dendoc-network
+    depends_on:
+      - db-server
+      - zipkin
+ 
+  ConfigServer:
+    build: ./DenDocConfigServer
+    image: docker-dendoc-config-server
+    ports:
+      - "8181:8181"
+    networks:
+      - dendoc-network
+    depends_on:
+      - EurekaServer
+      
+  ZuulServer:
+    build: ./DenDocZuulServer
+    image: docker-dendoc-zuul-gateway
+    ports:
+      - "8787:8787"
+    networks:
+      - dendoc-network
+    depends_on:
+      - ConfigServer
+      
+  registration-service:
+    build: ./DenDocRegistrationService
+    image: docker-dendoc-registration-service
+    ports:
+      - "8686:8686"
+    networks:
+      - dendoc-network
+    depends_on:
+      - ZuulServer
+
+      
+  login-service:
+    build: ./DenDocLoginService
+    image: docker-dendoc-login-service
+    ports:
+      - "8585:8585"
+    networks:
+      - dendoc-network
+    depends_on:
+      - registration-service 
+      
+networks:
+  dendoc-network:
